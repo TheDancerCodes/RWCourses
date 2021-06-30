@@ -1,6 +1,8 @@
 // Concrete Implementation of Repository Interface
 
+import 'dart:convert';
 
+import 'package:http/http.dart' as http;
 import 'package:rwcourses/constants.dart';
 import 'package:rwcourses/model/course.dart';
 import 'package:rwcourses/repository/repository.dart';
@@ -26,6 +28,16 @@ class CourseRepository implements Repository {
       // we use string interpolation to pass in the domain filter
       url += "&filter[domain_ids][]=$domainFilter";
     }
+
+    // Make a call to the HTTP get() method.
+    // We are passing the URL we calculated to the http.get() method, and it returns a response.
+    // The call is asynchronous ~ we need to use the 'await' keyword
+    http.Response response = await http.get(url);
+
+    // Decode the response
+    final apiResponse = json.decode(response.body);
+
+    print(apiResponse);
 
     return courses;
   }
