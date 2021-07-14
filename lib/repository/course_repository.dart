@@ -37,7 +37,11 @@ class CourseRepository implements Repository {
     // Decode the response
     final apiResponse = json.decode(response.body);
 
-    print(apiResponse);
+    // Pull out data objects & add a map call to map the json inside of data. 
+    // And for each course json object we're going to call fromJson() & add it to our courses list
+    apiResponse["data"].map((json) {
+      courses.add(Course.fromJson(json));
+    }).toList();
 
     return courses;
   }
