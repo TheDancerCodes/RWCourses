@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rwcourses/constants.dart';
 import 'package:rwcourses/model/course.dart';
+import 'package:rwcourses/repository/course_repository.dart';
 import 'package:rwcourses/ui/courses/courses_controller.dart';
 
 // Our Course Page is a staeful widget
@@ -13,8 +14,8 @@ class CoursesPage extends StatefulWidget {
 // file.
 class _CoursesPageState extends State<CoursesPage> {
 
-  // Private controller Property
-  final _controller = CoursesController();
+  // Private Controller Property
+  final _controller = CoursesController(CourseRepository());
 
 
 
