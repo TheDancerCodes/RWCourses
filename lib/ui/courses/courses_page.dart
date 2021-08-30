@@ -58,6 +58,7 @@ class _CoursesPageState extends State<CoursesPage> {
           padding: const EdgeInsets.only(bottom: 8.0),
           child: Text(course.name, style: TextStyle(fontSize: 18.0)),
         ),
+        subtitle: Text(course.domainString),
         trailing: ClipRRect(
           borderRadius: BorderRadius.circular(8.0),
           child: Image.network(
