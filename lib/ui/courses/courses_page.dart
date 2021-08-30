@@ -37,7 +37,20 @@ class _CoursesPageState extends State<CoursesPage> {
           return Center(child: CircularProgressIndicator());
         }
         
-        return Text(courses.toString());
+        return ListView.builder(
+          padding: const EdgeInsets.all(16.0),
+          itemCount: courses.length, // Length of the courses list
+          itemBuilder: (BuildContext context, int position) {
+            
+            // Return a call to our _buildRow helper in this anonymous function
+            // We are passing the courses and position to _buildRow
+            return _buildRow(courses[position]);
+          }
+        );
       });
+  }
+
+  Widget _buildRow(Course course) {
+    return Text(course.name);
   }
 }
