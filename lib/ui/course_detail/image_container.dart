@@ -29,7 +29,11 @@ class ImageContainer extends StatelessWidget {
      * by a decoration image.
      * 
      * NOTE: You can use the decoration image to control how the image fits inside the box, 
-     * and here we are using the default settings. */
+     * and here we are using the default settings. 
+     * 
+     * NOTE: We are also doing some error checking on the url to make sure it is valid.
+     * If it is valid, we use a NetworkImage to grab the image from the url; otherwise the
+     * background color is shown by setting the image on the box to null. */
     @override
   Widget build(BuildContext context) {
     return Container(
