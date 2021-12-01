@@ -34,9 +34,13 @@ class CourseDetailsPage extends StatelessWidget {
 
   // Private method to build a banner using the Image Container class.
   Widget _buildBanner() {
-    return ImageContainer(
-      height: 200,
-      url: course.artworkUrl,
+    return Hero(
+      tag: "cardArtwork-${course.courseId}",
+      transitionOnUserGestures: true,
+      child: ImageContainer(
+        height: 200,
+        url: course.artworkUrl,
+      ),
     );
   }
 
