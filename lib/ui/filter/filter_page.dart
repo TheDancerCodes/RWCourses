@@ -25,6 +25,25 @@ class _FilterPageState extends State<FilterPage> {
     _loadValue();
   }
 
+    // Helper Method - to load the currently saved filter value when the
+  // FilterPage is first opened
+  // NOTE: The call to getInstance is asynchronous, we will use the
+  // async/await keywords
+  void _loadValue() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Call setState and set the filterValue for the FilterPage.
+    // We will set it using the current value for the filter that is stored in
+    // SharedPreferences.
+    // SOLUTION: We are calling getInt() on prefs, which is going to return an integer from 
+    // SharedPreferences & we are passing in a key that the sharedPref for the filterValue is going 
+    // to be saved under.
+    setState(() {
+      _filterValue = prefs.getInt(Constants.filterKey) ?? 0;
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -82,25 +101,6 @@ class _FilterPageState extends State<FilterPage> {
        )
      );
    }
-
-  // Helper Method - to load the currently saved filter value when the
-  // FilterPage is first opened
-  // NOTE: The call to getInstance is asynchronous, we will use the
-  // async/await keywords
-  void _loadValue() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    // Call setState and set the filterValue for the FilterPage.
-    // We will set it using the current value for the filter that is stored in
-    // SharedPreferences.
-    // SOLUTION: We are calling getInt() on prefs, which is going to return an integer from 
-    // SharedPreferences & we are passing in a key that the sharedPref for the filterValue is going 
-    // to be saved under.
-    setState(() {
-      _filterValue = prefs.getInt(Constants.filterKey) ?? 0;
-    });
-
-  }
 
   // A private message that will be called when the selected filter changes.
   // Call setState() to update the state of the filter page filter value.
