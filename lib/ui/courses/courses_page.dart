@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:rwcourses/constants.dart';
 import 'package:rwcourses/model/course.dart';
 import 'package:rwcourses/repository/course_repository.dart';
+import 'package:rwcourses/state/filter_state_container.dart';
 import 'package:rwcourses/ui/course_detail/course_detail_page.dart';
 import 'package:rwcourses/ui/courses/courses_controller.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Our Course Page is a staeful widget
 class CoursesPage extends StatefulWidget {
@@ -19,36 +18,15 @@ class _CoursesPageState extends State<CoursesPage> {
   // Private Controller Property
   final _controller = CoursesController(CourseRepository());
 
-  // Add a filter courses value
-  int _filterValue = Constants.allFilter;
+  // Instance of FilterState class to hold the currently selected filter value.
+  FilterState state;
 
-    // Add initState to call to loadValue
-  // Calling the new loadValue() function from the initState() override for _CoursesPageState
-  // SOLUTION: This lets is retrieve the currently saved filterValue that is in SharedPreferences 
-  //when first loading the CoursesPage.
+  // To set the value of the state property, add this method override
+  // This connects the state of CoursesPage to the ingerited widget that's above it in the widget tree.
   @override
-  void initState() {
-    super.initState();
-    _loadValue();
-  }
-
-    // Helper Method - to load the currently saved filter value when the
-  // FilterPage is first opened
-  // NOTE: The call to getInstance is asynchronous, we will use the
-  // async/await keywords
-  void _loadValue() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    // Call setState and set the filterValue for the FilterPage.
-    // We will set it using the current value for the filter that is stored in
-    // SharedPreferences.
-    // SOLUTION: We are calling getInt() on prefs, which is going to return an integer from 
-    // SharedPreferences & we are passing in a key that the sharedPref for the filterValue is going 
-    // to be saved under.
-    setState(() {
-      _filterValue = prefs.getInt(Constants.filterKey) ?? 0;
-    });
-
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    state = FilterStateContainer.of(context);
   }
 
 
@@ -61,15 +39,18 @@ class _CoursesPageState extends State<CoursesPage> {
     // SOLUTION: In our Courses Controller, to fetch courses we pass the filterValue prperty so that 
     // we fetch courses for the currently selected filter
     return FutureBuilder<List<Course>>(
-      future: _controller.fetchCourses(_filterValue),
+      future: _controller.fetchCourses(state.filterValue),
       builder: (context, snapshot) {
         // NOTE: The snapshot will contain various states of teh future as it comes back.
         // For Now: Use data property of the snapshot to hold the list of courses
         var courses = snapshot.data;
 
         // Show progress indicator widget if courses that are returned are null, 
-        //meaning snapshot data is null.
-        if (courses == null) {
+        // meaning snapshot data is null.
+        // Check the snapshot connectionState property -> continue to show a progress indicator 
+        // if the connection state is not done.
+        if (courses == null || 
+        snapshot.connectionState != ConnectionState.done) {
           return Center(child: CircularProgressIndicator());
         }
         
