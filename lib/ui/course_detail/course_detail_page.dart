@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rwcourses/model/course.dart';
 import 'package:rwcourses/ui/course_detail/image_container.dart';
 import 'package:rwcourses/utils/string_extensions.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CourseDetailsPage extends StatelessWidget {
 
@@ -26,9 +27,16 @@ class CourseDetailsPage extends StatelessWidget {
         children: <Widget>[
           _buildBanner(),
           _buildMain(context),
-          _buildDetails(context,)
+          _buildDetails(context),
+
+          // Button to call our _launchCourse() method
+          // In the onPressed() handler, we call our _launchCourse() helper and we pass in the courseID
+          FlatButton(
+            child: Text("View Course"),
+            onPressed: () => _launchCourse(course.courseId),
+          )
         ],
-        )
+      )
     );
   }
 
@@ -92,6 +100,13 @@ class CourseDetailsPage extends StatelessWidget {
 
       ),
     );
+  }
+
+  // Helper Method that launches the course.
+  // SOLUTION: Passing the launch() method a string that has the URL for a course on the
+  // raywenderlich.com site
+  void _launchCourse(String courseId) {
+    launch("https://raywenderlich.com/$courseId");
   }
 
 }
